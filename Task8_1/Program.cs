@@ -13,25 +13,30 @@ namespace Task8_1
         static void Main(string[] args)
         {
             Catalog catalog = new Catalog();
-            XmlSerializer formatter = new XmlSerializer(typeof(Book));
+            //catalog.Fill();
             catalog.ParseXML();
-            //    // получаем поток, куда будем записывать сериализованный объект
-            //    using (FileStream fs = new FileStream("newbook.xml", FileMode.OpenOrCreate))
-            //    {
-            //        formatter.Serialize(fs, catalog.ParseXML());
-            //        Console.WriteLine("Объект сериализован");
-            //    }
+            XmlSerializer formatter = new XmlSerializer(typeof(Catalog));
+            // получаем поток, куда будем записывать сериализованный объект
+            using (FileStream fs = new FileStream("catalog.xml", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, catalog);
+                Console.WriteLine("Объект сериализован");
+            }
 
-            //    // десериализация
-            //    using (FileStream fs = new FileStream("persons.xml", FileMode.OpenOrCreate))
-            //    {
-            //        Book newBook = (Book)formatter.Deserialize(fs);
+            // десериализация
+            using (FileStream fs = new FileStream("catalog.xml", FileMode.OpenOrCreate))
+            {
+                Catalog newCatalog = (Catalog)formatter.Deserialize(fs);
 
-            //        Console.WriteLine("Объект десериализован");
-            //        Console.WriteLine($"Id: {newBook.Id} --- Isbn: {newBook.Isbn}");
-            //    }
-            //     Console.ReadLine();
-            //}
+                Console.WriteLine("Объект десериализован");
+                Console.WriteLine($"Object: {newCatalog.Books}");
+                foreach (var item in newCatalog.Books)
+                {
+                    Console.WriteLine($"Id: {item.Id}");
+
+                }
+            }
+            Console.ReadLine();
         }
     }
 }
